@@ -1,0 +1,13 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.errors {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: red;
+}

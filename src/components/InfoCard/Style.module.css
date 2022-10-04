@@ -1,0 +1,8 @@
+.info {
+    width: 20%;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
