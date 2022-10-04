@@ -1,5 +1,8 @@
-// Types
+// Core
 import { FC, useMemo } from 'react'
+
+// Types
+import { Email } from '../../../types';
 
 // Component
 import Card from '@mui/material/Card'
@@ -8,7 +11,7 @@ import Card from '@mui/material/Card'
 import styles from './Style.module.css'
 
 interface EmailTableProps {
-    emails: any[];
+    emails: Email[];
 }
 
 const EmailTable: FC<EmailTableProps> = ({ emails }) => {

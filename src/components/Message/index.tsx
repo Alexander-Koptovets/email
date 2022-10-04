@@ -20,15 +20,15 @@ interface MessageProps {
     id: number | string;
     username: string;
     email: string;
-    auth: any,
+    auth: string,
     onClick: () => void;
 }
 
 const Message: FC<MessageProps> = ({ id, username, email, auth, onClick }) => {
-    const [to, setTo] = useState<string | null>(null);
-    const [theme, setTheme] = useState<string | null>(null);
+    const [to, setTo] = useState<string>('');
+    const [theme, setTheme] = useState<string>('');
     // const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-    const [text, setText] = useState<string | null>(null);
+    const [text, setText] = useState<string>('');
 
     const onSend = async () => {
         if (to && theme && text) {
@@ -50,10 +50,10 @@ const Message: FC<MessageProps> = ({ id, username, email, auth, onClick }) => {
             });
 
             if (response.ok) {
-                setTo(null);
-                setTheme(null);
+                setTo('');
+                setTheme('');
                 // setEditorState(() => EditorState.createEmpty());
-                setText(null);
+                setText('');
                 onClick();
             }
         }

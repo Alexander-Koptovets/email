@@ -1,6 +1,7 @@
 // Types
 import type { NextPage } from 'next'
 import { GetServerSideProps } from 'next'
+import { User, Email } from '../../types'
 
 // Core
 import Head from 'next/head'
@@ -17,16 +18,16 @@ import Message from '../../src/components/Message'
 import styles from './Style.module.css'
 
 interface EmailsProps {
-    user: any,
-    emails: any[],
-    auth: any,
+    user: User,
+    emails: Email[],
+    auth: string,
 }
 
 const Emails: NextPage<EmailsProps> = ({ user, emails, auth }) => {
     const router = useRouter();
 
     const [isMessage, setIsMessage] = useState<boolean>(false);
-    const [data, setData] = useState<any[]>(emails);
+    const [data, setData] = useState<Email[]>(emails);
 
     const updateData = async () => {
         const authHeader = { "Authorization" : `Basic ${auth}` };

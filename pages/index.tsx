@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import SignIn from '../src/components/SignIn'
 import LogIn from '../src/components/LogIn'
 import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 
 // Style
 import styles from '../styles/Home.module.css'
@@ -18,20 +19,23 @@ import { formatMuiErrorMessage } from '@mui/utils'
 const Home: NextPage = () => {
   const router = useRouter();
 
-  const [login, setLogin] = useState<string | null>('s');
+  const [login, setLogin] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
   const [errors, setErrors] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSignUp = async () => {
-    let user = {
+    setLoading(true);
+    
+    const user = {
       username: login,
       email: email,
       password: password,
     }
 
-    let response = await fetch('http://164.92.190.53:4005/api/users/', {
+    const response = await fetch('http://164.92.190.53:4005/api/users/', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -45,19 +49,24 @@ const Home: NextPage = () => {
       setEmail(null)
       setPassword(null)
       setIsSignUp(false)
+      setLoading(false);
     } else {
-      let result = await response.json();
+      const result = await response.json();
 
       let errors = [];
       for (let key in result) {
         errors.push(result[key]);
       }
+
+      setLoading(false);
       setErrors(errors.join(' '));
     }
   }
 
   const onLogIn = async () => {
     setErrors(null);
+    setLoading(true);
+
     const credentials = window.btoa(`${login}:${password}`);
     const auth = { "Authorization" : `Basic ${credentials}` };
     const response = await fetch('http://164.92.190.53:4005/api/users/current/', {
@@ -65,6 +74,8 @@ const Home: NextPage = () => {
     });
 
     if (response.ok) {
+      setLoading(false);
+
       await router.push({
         pathname: '/emails',
         query: { credentials }
@@ -76,6 +87,8 @@ const Home: NextPage = () => {
       for (let key in result) {
         errors.push(result[key]);
       }
+
+      setLoading(false);
       setErrors(errors.join(' '));
     }
   }
@@ -83,6 +96,14 @@ const Home: NextPage = () => {
   const onSwitch = () => {
     setIsSignUp(prev => !prev);
     setErrors(null);
+  }
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <Typography variant='h4' components='div'>Loading...</Typography>
+      </div>
+    )
   }
 
   return (
