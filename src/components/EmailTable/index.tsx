@@ -16,16 +16,20 @@ const EmailTable: FC<EmailTableProps> = ({ emails }) => {
 
     return (
         <Card className={styles.table}>
-            <table>
+            <table className={styles.table}>
                 <thead>
                     <tr>
-                        <td>Emails</td>
+                        <td>Message</td>
+                        <td>Recipient</td>
+                        <td>Subject</td>
                     </tr>
                 </thead>
                 <tbody>
                     {data.length && data.map(email => (
-                        <tr>
-                            <td>{email}</td>
+                        <tr key={email.id}>
+                            <td>{email.message}</td>
+                            <td>{email.recipient}</td>
+                            <td>{email.subject}</td>
                         </tr>
                     ))}
                 </tbody>

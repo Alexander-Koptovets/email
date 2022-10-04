@@ -18,14 +18,25 @@ import styles from './Style.module.css'
 
 interface EmailsProps {
     user: any,
-    count: number | string,
     emails: any[],
+    auth: any,
 }
 
-const Emails: NextPage<EmailsProps> = ({ user, count, emails }) => {
+const Emails: NextPage<EmailsProps> = ({ user, emails, auth }) => {
     const router = useRouter();
 
     const [isMessage, setIsMessage] = useState<boolean>(false);
+    const [data, setData] = useState<any[]>(emails);
+
+    const updateData = async () => {
+        const authHeader = { "Authorization" : `Basic ${auth}` };
+    
+        const responseData = await fetch('http://164.92.190.53:4005/api/emails/', {
+            headers: authHeader,
+        });
+        const emailsData = await responseData.json();
+        setData(emailsData.results);
+    }
 
     const onLogOut = () => {
         router.push({ pathname: '/' });
@@ -47,13 +58,15 @@ const Emails: NextPage<EmailsProps> = ({ user, count, emails }) => {
                     email={user.email}
                     onClick={onCreateMessage}
                 />
-                <EmailTable emails={emails} />
+                <EmailTable emails={data} />
             </div>
             {isMessage && (
             <Message 
                 id={user.id}
                 username={user.username}
                 email={user.email}
+                auth={auth}
+                onClick={updateData}
             />
         )}
         </MainLayout>
@@ -77,8 +90,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     return {
         props: {
             user: user,
-            count: data.count,
             emails: data.results,
+            auth: query.credentials,
         }
     }
 }
